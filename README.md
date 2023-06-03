@@ -13,5 +13,5 @@ You must run it as Administrator
 Releases contains version for .NET framework 6.0 (small .exe)
 And Self-Contained one (big .exe)
 
-Antivirus software may detect this program as a threat as it is bulk changing file permissions.
+Antivirus software may detect this program as a threat as it is bulk (Just 3 above files) changing file permissions.
 (Especially when you have many Edge versions)
