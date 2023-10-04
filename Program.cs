@@ -10,32 +10,35 @@ namespace IExplorerEnabler
     {
         static void Main(string[] args)
         {
-            string[] files = Directory.GetFiles("C:\\Program Files (x86)\\Microsoft\\Edge\\Application","*.*",SearchOption.AllDirectories);
-            IEnumerable<string> ie_to_edge_files = files.Where(x => x.Contains("ie_to_edge"));
-
-          // NTAccount acc = new NTAccount(Environment.UserDomainName,"Administrator");
-       
-            foreach(string ie_file_to_break in ie_to_edge_files)
+            try
             {
-                Console.WriteLine($"Breaking {ie_file_to_break}...");
-                FileInfo finfo = new FileInfo(ie_file_to_break);
-                FileSecurity newSecurity = finfo.GetAccessControl();
-
-               // newSecurity.SetOwner(new SecurityIdentifier(WellKnownSidType.WinSystemLabelSid,null));
-               //   newSecurity.SetOwner(new NTAccount(WindowsIdentity.GetCurrent().Name));
-                
-                FileSystemAccessRule ForbidAll = new FileSystemAccessRule
-                    (
-                    new SecurityIdentifier(WellKnownSidType.WorldSid,null),
-                    FileSystemRights.ExecuteFile,
-                    AccessControlType.Deny
-                    );             
-                newSecurity.AddAccessRule(ForbidAll);         
-                finfo.SetAccessControl(newSecurity);
+                string[] files = Directory.GetFiles("C:\\Program Files (x86)\\Microsoft\\Edge\\Application", "*.*", SearchOption.AllDirectories);
+                IEnumerable<string> ie_to_edge_files = files.Where(x => x.Contains("ie_to_edge"));
+                foreach (string ie_file_to_break in ie_to_edge_files)
+                {
+                    Console.WriteLine($"Breaking {ie_file_to_break}...");
+                    FileInfo finfo = new FileInfo(ie_file_to_break);
+                    FileSecurity newSecurity = finfo.GetAccessControl();
+                    FileSystemAccessRule ForbidAll = new FileSystemAccessRule
+                        (
+                        new SecurityIdentifier(WellKnownSidType.WorldSid, null),
+                        FileSystemRights.ExecuteFile,
+                        AccessControlType.Deny
+                        );
+                    newSecurity.AddAccessRule(ForbidAll);
+                    finfo.SetAccessControl(newSecurity);
+                }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Completed... IExplorer should work normally now, press any key to close");
+                Console.ResetColor();
+                Console.ReadKey();
             }
-
-            Console.WriteLine("Completed... IExplorer should work normally now, press any key to close");
-            Console.ReadKey();
+            catch(Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Failed with Exception: {e.GetType().Name},\n Message: {e.Message}");
+                Console.ResetColor();
+            }
         }
     }
 }
